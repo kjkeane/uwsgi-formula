@@ -1,0 +1,26 @@
+########################################################################
+# File managed by Salt at <{{ source }}>.
+# Your changes will be overwritten.
+########################################################################
+
+[uwsgi]
+project = {{ app }}
+socket = {{ app_items.ip_address }}:{{ app_items.port }}
+pidfile = /run/uwsgi/%(project).pid
+
+{%- for logger in app_items.logger %}
+logger = {{ logger }}
+{%- endfor %}
+base = {{ app_items.base }}
+plugins = {{ app_items.plugins|join(',') }}
+
+chdir = {{ app_items.chdir }}/{{ app }}
+home = {{ app_items.home }}/{{ app }}
+module = wsgi:application
+
+master = {{ app_items.master }}
+processes = {{ app_items.processes }}
+
+chown-socket = uwsgi:uwsgi
+chmod-socket = 600
+vacuum = true

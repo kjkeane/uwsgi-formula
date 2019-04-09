@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+# vim: ft=jinja
+
+{#- Get the `tplroot` from `tpldir` #}
+{%- set tplroot = tpldir.split('/')[0] %}
+{#- Start imports as #}
+{%- import_yaml tplroot ~ "/defaults.yaml" or {} as default_settings %}
+{%- import_yaml tplroot ~ "/osfamilymap.yaml" or {} as osfamilymap %}
+{%- import_yaml tplroot ~ "/osmap.yaml" or {} as osmap %}
+{%- import_yaml tplroot ~ "/osfingermap.yaml" or {} as osfingermap %}
+
+{%- set defaults = salt['grains.filter_by'](default_settings,
+    default='uwsgi',
+    merge=salt['grains.filter_by'](osfamilymap, grain='os_family',
+      merge=salt['grains.filter_by'](osmap, grain='os',
+        merge=salt['grains.filter_by'](osfingermap, grain='osfinger',
+          merge=salt['pillar.get']('uwsgi:lookup', default={})
+        )
+      )
+    )
+) %}
+
+{#- Merge the uwsgi pillar #}
+{%- set uwsgi = salt['pillar.get']('uwsgi', default=defaults, merge=True) %}

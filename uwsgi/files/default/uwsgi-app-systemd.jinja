@@ -1,0 +1,22 @@
+########################################################################
+# File managed by Salt at <{{ source }}>.
+# Your changes will be overwritten.
+########################################################################
+
+[Unit]
+Description=%i uWSGI app
+After=syslog.target
+
+[Service]
+Type=notify
+ExecStart=/usr/sbin/uwsgi \
+        --ini /etc/uwsgi.d/%i.ini \
+        --socket /var/run/uwsgi/%i.socket
+ExecReload=/usr/sbin/uwsgi \
+        --reload /var/run/uwsgi/%i.pid
+User=uwsgi
+Group=uwsgi
+Restart=on-failure
+KillSignal=SIGQUIT
+StandardError=syslog
+NotifyAccess=all

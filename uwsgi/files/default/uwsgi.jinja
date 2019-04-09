@@ -1,0 +1,23 @@
+########################################################################
+# File managed by Salt at <{{ source }}>.
+# Your changes will be overwritten.
+########################################################################
+
+[uwsgi]
+uid = {{ uwsgi.user }}
+gid = {{ uwsgi.group }}
+pidfile = /run/uwsgi/uwsgi.pid
+emperor = /etc/uwsgi.d
+stats = /run/uwsgi/stats.sock
+chmod-socket = 660
+{%- if 'emperor_tyrant' in uwsgi %}
+emperor-tyrant = {{ uwsgi.emperor_tyrant }}
+{%- else %}
+emperor-tyrant = true
+{%- endif %}
+cap = setgid,setuid
+{%- if 'vassal_set' in uwsgi %}
+{%- for item in uwsgi.vassal_set %}
+vassal-set = {{ item }}
+{%- endfor %}
+{%- endif %}

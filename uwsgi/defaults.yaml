@@ -1,0 +1,9 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+uwsgi:
+  user: 'uwsgi'
+  group: 'uwsgi'
+  includes_dir: '/etc/uwsgi.d'
+  service:
+    name: 'uwsgi'

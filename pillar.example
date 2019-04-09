@@ -1,0 +1,17 @@
+uwsgi:
+  apps:
+    app1:
+      ip_address: '127.0.0.1'
+      port: 3000
+      logger:
+        - 'file:/var/log/uwsgi/%(project).log'
+        - 'rsyslog:log.example.com:514'
+      base: '/opt/django'
+      plugin:
+        - python
+        - logfile
+        - rsyslog
+      chdir: '/opt/django/apps'
+      home: '/opt/django/venvs'
+      master: True
+      processes: 2
